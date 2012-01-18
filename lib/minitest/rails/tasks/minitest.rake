@@ -3,16 +3,13 @@ require 'rake/testtask'
 MINITEST_TASKS = %w(models controllers helpers mailers integration) #views
 
 desc 'Runs all tests'
-task :test do
-  errors = MINITEST_TASKS.collect do |task|
-    begin
-      Rake::Task["test:#{task}"].invoke
-      nil
-    rescue => e
-      task
-    end
-  end.compact
-  abort "Errors running #{errors * ', '}!" if errors.any?
+Rake::TestTask.new(sub => 'test:prepare') do |t|
+  t.libs << 'test'
+  t.pattern = []
+  MINITEST_TASKS.each do |sub|
+    t.pattern << "test/#{sub}/**/*_test.rb"
+  end
+  t.pattern = t.pattern.join(' ')
 end
 
 namespace :test do
