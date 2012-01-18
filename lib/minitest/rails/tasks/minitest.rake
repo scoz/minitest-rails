@@ -3,7 +3,7 @@ require 'rake/testtask'
 MINITEST_TASKS = %w(models controllers helpers mailers integration) #views
 
 desc 'Runs all tests'
-Rake::TestTask.new(sub => 'test:prepare') do |t|
+Rake::TestTask.new('test' => 'test:prepare') do |t|
   t.libs << 'test'
   t.pattern = []
   MINITEST_TASKS.each do |sub|
